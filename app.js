@@ -16,6 +16,10 @@ app.use(bodyParser.json());
 
 app.use("/api", indexRouter);
 
+app.get("/", (req, res) => {
+  res.status(200).send("ok");
+});
+
 const mongoURI = MONGODB_URI_PROD;
 
 mongoose
@@ -27,6 +31,8 @@ mongoose
     console.log("DB connection fail", err);
   });
 
-app.listen(5000, () => {
-  console.log("server on 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`server running on ${PORT}`);
 });
