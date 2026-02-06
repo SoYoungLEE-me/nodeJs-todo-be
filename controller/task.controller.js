@@ -6,7 +6,7 @@ taskController.createTask = async (req, res) => {
   try {
     const { task, isComplete } = req.body;
     const newTask = new Task({ task, isComplete });
-    await newTask.save().select("-__v");
+    await newTask.save();
     res.status(200).json({ status: "ok", data: newTask });
   } catch (err) {
     res.status(400).json({ status: "fail", error: err });
@@ -15,7 +15,7 @@ taskController.createTask = async (req, res) => {
 
 taskController.getTask = async (req, res) => {
   try {
-    const taskList = await Task.find({});
+    const taskList = await Task.find({}).select("-__v");
     res.status(200).json({ status: "ok", data: taskList });
   } catch (err) {
     res.status(400).json({ status: "fail", error: err });
@@ -54,6 +54,15 @@ taskController.deleteTask = async (req, res) => {
     res.status(200).json({ status: "ok", data: deletedTask });
   } catch (err) {
     res.status(400).json({ status: "fail", error: err });
+  }
+};
+
+taskController.deleteAllTasks = async (req, res) => {
+  try {
+    await Task.deleteMany({});
+    res.status(200).json({ status: "ok" });
+  } catch (err) {
+    res.status(500).json({ status: "fail", error: err.message });
   }
 };
 
