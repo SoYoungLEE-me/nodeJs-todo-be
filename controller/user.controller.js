@@ -21,7 +21,7 @@ userController.createUser = async (req, res) => {
 
     res.status(200).json({ status: "success" });
   } catch (err) {
-    res.status(400).json({ status: "fail", error: err });
+    res.status(400).json({ status: "fail", error: err.message });
   }
 };
 
@@ -32,13 +32,13 @@ userController.loginWithEmail = async (req, res) => {
     if (user) {
       const isMatch = bcrypt.compareSync(password, user.password);
       if (isMatch) {
-        const token = user.generateToken();
+        const token = await user.generateToken();
         res.status(200).json({ status: "success", user, token });
       }
     }
     throw new Error("아이디 또는 비밀번호가 일치하지 않습니다.");
   } catch (err) {
-    res.status(400).json({ status: "fail", error: err });
+    res.status(400).json({ status: "fail", error: err.message });
   }
 };
 
